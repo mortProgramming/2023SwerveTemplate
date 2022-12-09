@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -20,35 +21,41 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drivetrain extends SubsystemBase {
+    private final AHRS navX;
 
-    public final SwerveDriveKinematics driveKinematics =
-            new SwerveDriveKinematics(
-                    // Front left
-                    new Translation2d(
-                            DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
-                    // Front right
-                    new Translation2d(
-                            DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0),
-                    // Back left
-                    new Translation2d(
-                            -DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
-                    // Back right
-                    new Translation2d(
-                            -DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
-                            -DRIVETRAIN_WHEELBASE_METERS / 2.0));
-
-    private final AHRS navX = new AHRS(SerialPort.Port.kMXP);
+    public final SwerveDriveKinematics driveKinematics;
+    private final SwerveDriveOdometry driveOdometry;
 
     private final SwerveModule frontLeftModule;
     private final SwerveModule frontRightModule;
     private final SwerveModule backLeftModule;
     private final SwerveModule backRightModule;
 
-    private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+    private ChassisSpeeds chassisSpeeds;
 
     private static Drivetrain drivetrain;
 
     public Drivetrain() {
+        navX = new AHRS(SerialPort.Port.kMXP);
+        driveKinematics  = new SwerveDriveKinematics(
+                // Front left
+                new Translation2d(
+                        DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
+                // Front right
+                new Translation2d(
+                        DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0),
+                // Back left
+                new Translation2d(
+                        -DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
+                // Back right
+                new Translation2d(
+                        -DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                        -DRIVETRAIN_WHEELBASE_METERS / 2.0)
+        );
+        driveOdometry = new SwerveDriveOdometry(driveKinematics, getGyroscopeRotation());
+
+        chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
+
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
         frontLeftModule =
@@ -117,25 +124,14 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        //todo: yeah
-        return null;
+        return driveOdometry.getPoseMeters();
     }
 
     public void resetPose(Pose2d pose) {
-        //todo: yep
+        driveOdometry.resetPosition(pose, getGyroscopeRotation());
     }
     
-    public void setModuleStates(SwerveModuleState[] moduleStates){
-        //todo: yep
-    }
-
-    public void drive(ChassisSpeeds chassisSpeeds) {
-        this.chassisSpeeds = chassisSpeeds;
-    }
-
-    @Override
-    public void periodic() {
-        SwerveModuleState[] states = driveKinematics.toSwerveModuleStates(chassisSpeeds);
+    public void setModuleStates(SwerveModuleState[] states){
         SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
 
         frontLeftModule.set(
@@ -150,6 +146,17 @@ public class Drivetrain extends SubsystemBase {
         backRightModule.set(
                 states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
                 states[3].angle.getRadians());
+    }
+
+    public void drive(ChassisSpeeds chassisSpeeds) {
+        this.chassisSpeeds = chassisSpeeds;
+    }
+
+
+    @Override
+    public void periodic() {
+        SwerveModuleState[] states = driveKinematics.toSwerveModuleStates(chassisSpeeds);
+        setModuleStates(states);
     }
 
     public static Drivetrain getInstance() {
