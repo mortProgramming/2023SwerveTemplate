@@ -6,7 +6,6 @@ import static org.mort11.Constants.DrivetrainSpecs.*;
 import com.kauailabs.navx.frc.AHRS;
 import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SwerveModule;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -37,21 +36,24 @@ public class Drivetrain extends SubsystemBase {
 
     public Drivetrain() {
         navX = new AHRS(SerialPort.Port.kMXP);
-        driveKinematics  = new SwerveDriveKinematics(
-                // Front left
-                new Translation2d(
-                        DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
-                // Front right
-                new Translation2d(
-                        DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0),
-                // Back left
-                new Translation2d(
-                        -DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
-                // Back right
-                new Translation2d(
-                        -DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
-                        -DRIVETRAIN_WHEELBASE_METERS / 2.0)
-        );
+        driveKinematics =
+                new SwerveDriveKinematics(
+                        // Front left
+                        new Translation2d(
+                                DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                                DRIVETRAIN_WHEELBASE_METERS / 2.0),
+                        // Front right
+                        new Translation2d(
+                                DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                                -DRIVETRAIN_WHEELBASE_METERS / 2.0),
+                        // Back left
+                        new Translation2d(
+                                -DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                                DRIVETRAIN_WHEELBASE_METERS / 2.0),
+                        // Back right
+                        new Translation2d(
+                                -DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                                -DRIVETRAIN_WHEELBASE_METERS / 2.0));
         driveOdometry = new SwerveDriveOdometry(driveKinematics, getGyroscopeRotation());
 
         chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
@@ -109,16 +111,16 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public Rotation2d getGyroscopeRotation() {
-            if (navX.isMagnetometerCalibrated()) {
-                    // We will only get valid fused headings if the magnetometer is calibrated
-                    return Rotation2d.fromDegrees(navX.getFusedHeading());
-            }
+        if (navX.isMagnetometerCalibrated()) {
+            // We will only get valid fused headings if the magnetometer is calibrated
+            return Rotation2d.fromDegrees(navX.getFusedHeading());
+        }
 
-            // We have to invert the angle of the NavX so that rotating the robot counter-clockwise
-            // makes the angle increase.
-            return Rotation2d.fromDegrees(360.0 - navX.getYaw());
+        // We have to invert the angle of the NavX so that rotating the robot counter-clockwise
+        // makes the angle increase.
+        return Rotation2d.fromDegrees(360.0 - navX.getYaw());
     }
-    
+
     public SwerveDriveKinematics getDriveKinematics() {
         return driveKinematics;
     }
@@ -130,8 +132,8 @@ public class Drivetrain extends SubsystemBase {
     public void resetPose(Pose2d pose) {
         driveOdometry.resetPosition(pose, getGyroscopeRotation());
     }
-    
-    public void setModuleStates(SwerveModuleState[] states){
+
+    public void setModuleStates(SwerveModuleState[] states) {
         SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
 
         frontLeftModule.set(
@@ -151,7 +153,6 @@ public class Drivetrain extends SubsystemBase {
     public void drive(ChassisSpeeds chassisSpeeds) {
         this.chassisSpeeds = chassisSpeeds;
     }
-
 
     @Override
     public void periodic() {

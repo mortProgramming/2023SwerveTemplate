@@ -3,20 +3,18 @@ package org.mort11;
 import static org.mort11.Constants.DrivetrainSpecs.*;
 import static org.mort11.Constants.OperatorConstants.*;
 
-import java.util.ArrayList;
-
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
+import java.util.ArrayList;
 import org.mort11.commands.DriveControl;
 import org.mort11.subsystems.Auto;
 import org.mort11.subsystems.Drivetrain;
-
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
 
 public class RobotContainer {
     private final Drivetrain drivetrain = Drivetrain.getInstance();
@@ -46,7 +44,8 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        ArrayList<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("Test", new PathConstraints(4, 3));
+        ArrayList<PathPlannerTrajectory> pathGroup =
+                PathPlanner.loadPathGroup("Test", new PathConstraints(.3, .1));
 
         return auto.createAutoCommand(pathGroup);
     }
