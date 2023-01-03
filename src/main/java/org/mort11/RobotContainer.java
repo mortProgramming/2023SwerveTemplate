@@ -44,10 +44,12 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        ArrayList<PathPlannerTrajectory> pathGroup =
-                PathPlanner.loadPathGroup("Test", new PathConstraints(2, 1));
+        // ArrayList<PathPlannerTrajectory> pathGroup =
+        //         PathPlanner.loadPathGroup("Test", new PathConstraints(2, 1));
 
-        return auto.createAutoCommand(pathGroup);
+        // return auto.createAutoCommand(pathGroup);
+
+        return auto.createAutoCommand2(PathPlanner.loadPath("Test", new PathConstraints(2, 1)));
     }
 
     private static double deadband(double value, double deadband) {
