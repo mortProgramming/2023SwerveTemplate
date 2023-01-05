@@ -5,20 +5,21 @@ import static org.mort11.Constants.OperatorConstants.*;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
-import java.util.ArrayList;
 import org.mort11.commands.DriveControl;
 import org.mort11.subsystems.Auto;
 import org.mort11.subsystems.Drivetrain;
+import org.mort11.subsystems.Limelight;
 
 public class RobotContainer {
     private final Drivetrain drivetrain = Drivetrain.getInstance();
     private final Auto auto = Auto.getInstance();
+    private final Limelight limelight = Limelight.getInstance();
 
     private final XboxController xboxController = new XboxController(CONTROLLER_PORT);
     private final Joystick joystick = new Joystick(JOYSTICK_PORT);
@@ -37,6 +38,15 @@ public class RobotContainer {
                                         * MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
 
         configureButtonBindings();
+    }
+
+    public void displaySmartDashboard() {
+        SmartDashboard.putBoolean("hasTarget", limelight.getHasTargets());
+        SmartDashboard.putNumber("targetPitch", limelight.getTargetPitch());
+        SmartDashboard.putNumber("targetYaw", limelight.getTargetYaw());
+        SmartDashboard.putNumber("targetArea", limelight.getTargetArea());
+        SmartDashboard.putNumber("targetSkew", limelight.getTargetSkew());
+        SmartDashboard.putNumber("targetPose", limelight.getTargetPose());
     }
 
     private void configureButtonBindings() {
