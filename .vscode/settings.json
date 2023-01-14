@@ -1,8 +1,6 @@
 {
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.server.launchMode": "Standard",
-  "editor.insertSpaces": true,
-  "editor.tabSize": 4,
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
@@ -16,7 +14,6 @@
     "**/.factorypath": true,
     "**/*~": true
   },
-  "java.import.gradle.java.home": "C:\\Program Files\\Java\\jdk-11.0.15.1\\",
   "java.test.config": [
     {
       "name": "WPIlibUnitTests",

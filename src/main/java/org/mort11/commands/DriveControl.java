@@ -40,7 +40,8 @@ public class DriveControl extends CommandBase {
                         translationXSupplier.getAsDouble(),
                         translationYSupplier.getAsDouble(),
                         rotationSupplier.getAsDouble(),
-                        drivetrain.getGyroscopeRotation()));
+                        drivetrain.getGyroscopeRotation())
+                        );
     }
 
     @Override

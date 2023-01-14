@@ -1,17 +1,19 @@
 package org.mort11;
 
-import static org.mort11.Constants.DrivetrainSpecs.*;
-import static org.mort11.Constants.OperatorConstants.*;
-
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
+// import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import static org.mort11.util.Constants.DrivetrainSpecs.*;
+import static org.mort11.util.Constants.OperatorConstants.*;
+
 import org.mort11.commands.DriveControl;
+import org.mort11.commands.DriveToAprilTag;
 import org.mort11.subsystems.Auto;
 import org.mort11.subsystems.Drivetrain;
 import org.mort11.subsystems.Limelight;
@@ -21,7 +23,7 @@ public class RobotContainer {
     private final Auto auto = Auto.getInstance();
     private final Limelight limelight = Limelight.getInstance();
 
-    private final XboxController xboxController = new XboxController(CONTROLLER_PORT);
+    // private final XboxController xboxController = new XboxController(CONTROLLER_PORT);
     private final Joystick joystick = new Joystick(JOYSTICK_PORT);
 
     public RobotContainer() {
@@ -38,19 +40,18 @@ public class RobotContainer {
                                         * MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
 
         configureButtonBindings();
+        // drivetrain.zeroGyroscope();
     }
 
     public void displaySmartDashboard() {
-        SmartDashboard.putBoolean("hasTarget", limelight.getHasTargets());
-        SmartDashboard.putNumber("targetPitch", limelight.getTargetPitch());
-        SmartDashboard.putNumber("targetYaw", limelight.getTargetYaw());
-        SmartDashboard.putNumber("targetArea", limelight.getTargetArea());
-        SmartDashboard.putNumber("targetSkew", limelight.getTargetSkew());
-        SmartDashboard.putNumber("targetPose", limelight.getTargetPose());
+        SmartDashboard.putNumber("compass", drivetrain.getCompass());
+        SmartDashboard.putNumber("angle", drivetrain.getGyroscopeRotation().getDegrees());
     }
 
     private void configureButtonBindings() {
-        new Button(joystick::getTrigger).whenPressed(new InstantCommand(drivetrain::zeroGyroscope));
+        // new Button(joystick::getTrigger).whenPressed(new InstantCommand(drivetrain::zeroGyroscope));
+        // new Trigger(joystick::getTrigger).whileTrue(new InstantCommand(drivetrain::zeroGyroscope));
+        new Trigger(joystick::getTrigger).whileTrue(new DriveToAprilTag(1));
     }
 
     public Command getAutonomousCommand() {
@@ -59,7 +60,7 @@ public class RobotContainer {
 
         // return auto.createAutoCommand(pathGroup);
 
-        return auto.createAutoCommand2(PathPlanner.loadPath("Test", new PathConstraints(2, 1)));
+        return auto.createAutoCommand2(PathPlanner.loadPath("Test3", new PathConstraints(2, 1)));
     }
 
     private static double deadband(double value, double deadband) {

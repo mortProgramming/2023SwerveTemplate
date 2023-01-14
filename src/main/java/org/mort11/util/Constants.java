@@ -1,4 +1,4 @@
-package org.mort11;
+package org.mort11.util;
 
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import edu.wpi.first.math.util.Units;
@@ -42,16 +42,39 @@ public final class Constants {
 
         public static final double MAX_VOLTAGE = 12.0;
 
-        public static final double MAX_VELOCITY_METERS_PER_SECOND =
-                6380.0
-                        / 60.0
-                        * SdsModuleConfigurations.MK4I_L2.getDriveReduction()
-                        * SdsModuleConfigurations.MK4I_L2.getWheelDiameter()
-                        * Math.PI;
-        public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND =
-                MAX_VELOCITY_METERS_PER_SECOND
-                        / Math.hypot(
-                                DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
-                                DRIVETRAIN_WHEELBASE_METERS / 2.0);
+        public static final double MAX_VELOCITY_METERS_PER_SECOND = 6380.0
+                / 60.0
+                * SdsModuleConfigurations.MK4I_L2.getDriveReduction()
+                * SdsModuleConfigurations.MK4I_L2.getWheelDiameter()
+                * Math.PI;
+        public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND
+                / Math.hypot(
+                        DRIVETRAIN_TRACKWIDTH_METERS / 2.0,
+                        DRIVETRAIN_WHEELBASE_METERS / 2.0);
+    }
+
+    public static final class VisionConstants {
+        public static final double LIMELIGHT_PITCH = Units.degreesToRadians(15);
+        public static final double NODE_APRILTAG_HEIGHT = Units.inchesToMeters(27.5);
+        public static final double LIMELIGHT_HEIGHT = Units.inchesToMeters(15.2);
+
+        public static final double DISTANCE_AWAY = Units.inchesToMeters(43);
+
+    }
+
+    public enum LimelightPipeline {
+        APRILTAG (0), //id 0
+        REFLECTIVE (1), // id 1
+        DRIVER(2); // id 2
+
+        private final int id;
+
+        LimelightPipeline(int id) {
+            this.id = id;
+        }
+
+        public int id() {
+            return id;
+        }
     }
 }
