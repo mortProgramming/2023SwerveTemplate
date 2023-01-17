@@ -14,13 +14,14 @@ import static org.mort11.util.Constants.OperatorConstants.*;
 
 import org.mort11.commands.DriveControl;
 import org.mort11.commands.DriveToAprilTag;
-import org.mort11.subsystems.Auto;
+import org.mort11.commands.TestAutoPlay;
+// import org.mort11.subsystems.Auto;
 import org.mort11.subsystems.Drivetrain;
 import org.mort11.subsystems.Limelight;
 
 public class RobotContainer {
     private final Drivetrain drivetrain = Drivetrain.getInstance();
-    private final Auto auto = Auto.getInstance();
+    // private final Auto auto = Auto.getInstance();
     private final Limelight limelight = Limelight.getInstance();
 
     // private final XboxController xboxController = new XboxController(CONTROLLER_PORT);
@@ -30,10 +31,10 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
                 new DriveControl(
                         () ->
-                                -modifyAxis(joystick.getY(), joystick.getThrottle())
+                                -modifyAxis(joystick.getX(), joystick.getThrottle())
                                         * MAX_VELOCITY_METERS_PER_SECOND,
                         () ->
-                                -modifyAxis(joystick.getX(), joystick.getThrottle())
+                                modifyAxis(joystick.getY(), joystick.getThrottle())
                                         * MAX_VELOCITY_METERS_PER_SECOND,
                         () ->
                                 -modifyAxis(joystick.getTwist(), joystick.getThrottle())
@@ -60,7 +61,8 @@ public class RobotContainer {
 
         // return auto.createAutoCommand(pathGroup);
 
-        return auto.createAutoCommand2(PathPlanner.loadPath("Test3", new PathConstraints(2, 1)));
+        // return auto.createAutoCommand2(PathPlanner.loadPath("Test3", new PathConstraints(2, 1)));
+        return new TestAutoPlay();
     }
 
     private static double deadband(double value, double deadband) {
