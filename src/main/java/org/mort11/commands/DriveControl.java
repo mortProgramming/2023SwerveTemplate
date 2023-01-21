@@ -6,46 +6,39 @@ import java.util.function.DoubleSupplier;
 import org.mort11.subsystems.Drivetrain;
 
 public class DriveControl extends CommandBase {
-    private final Drivetrain drivetrain;
+	private final Drivetrain drivetrain;
 
-    private final DoubleSupplier translationXSupplier;
-    private final DoubleSupplier translationYSupplier;
-    private final DoubleSupplier rotationSupplier;
+	private final DoubleSupplier translationXSupplier;
+	private final DoubleSupplier translationYSupplier;
+	private final DoubleSupplier rotationSupplier;
 
-    public DriveControl(
-            DoubleSupplier translationXSupplier,
-            DoubleSupplier translationYSupplier,
-            DoubleSupplier rotationSupplier) {
-        drivetrain = Drivetrain.getInstance();
-        this.translationXSupplier = translationXSupplier;
-        this.translationYSupplier = translationYSupplier;
-        this.rotationSupplier = rotationSupplier;
+	public DriveControl(DoubleSupplier translationXSupplier, DoubleSupplier translationYSupplier,
+			DoubleSupplier rotationSupplier) {
+		drivetrain = Drivetrain.getInstance();
+		this.translationXSupplier = translationXSupplier;
+		this.translationYSupplier = translationYSupplier;
+		this.rotationSupplier = rotationSupplier;
 
-        addRequirements(drivetrain);
-    }
+		addRequirements(drivetrain);
+	}
 
-    @Override
-    public void execute() {
+	@Override
+	public void execute() {
 
-        // // robot-oriented drive
-        drivetrain.drive(
-                new ChassisSpeeds(
-                    translationXSupplier.getAsDouble(),
-                        translationYSupplier.getAsDouble(),
-                        rotationSupplier.getAsDouble()
-            )
-        );
-        // drivetrain.drive(
-        //         ChassisSpeeds.fromFieldRelativeSpeeds(
-        //                 translationXSupplier.getAsDouble(),
-        //                 translationYSupplier.getAsDouble(),
-        //                 rotationSupplier.getAsDouble(),
-        //                 drivetrain.getGyroscopeRotation())
-        //                 );
-    }
+		// // robot-oriented drive
+		drivetrain.drive(new ChassisSpeeds(translationXSupplier.getAsDouble(), translationYSupplier.getAsDouble(),
+				rotationSupplier.getAsDouble()));
+		// drivetrain.drive(
+		// ChassisSpeeds.fromFieldRelativeSpeeds(
+		// translationXSupplier.getAsDouble(),
+		// translationYSupplier.getAsDouble(),
+		// rotationSupplier.getAsDouble(),
+		// drivetrain.getGyroscopeRotation())
+		// );
+	}
 
-    @Override
-    public void end(boolean interrupted) {
-        drivetrain.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
-    }
+	@Override
+	public void end(boolean interrupted) {
+		drivetrain.drive(new ChassisSpeeds(0.0, 0.0, 0.0));
+	}
 }
