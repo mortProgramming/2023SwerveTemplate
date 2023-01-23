@@ -22,10 +22,10 @@ import static org.mort11.util.Constants.DrivetrainSpecs.MAX_VELOCITY_METERS_PER_
 import static org.mort11.util.Constants.DrivetrainSpecs.MAX_VOLTAGE;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper;
 // import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper;
-// import com.swervedrivespecialties.swervelib.MkSwerveModuleBuilder;
-// import com.swervedrivespecialties.swervelib.MotorType;
+// import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper;
+import com.swervedrivespecialties.swervelib.MkSwerveModuleBuilder;
+import com.swervedrivespecialties.swervelib.MotorType;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
 
@@ -81,85 +81,66 @@ public class Drivetrain extends SubsystemBase {
 
 		ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
-		// frontLeftModule = new MkSwerveModuleBuilder()
-		// .withLayout(
-		// tab.getLayout("Front Left Module", BuiltInLayouts.kList)
-		// .withSize(2, 4)
-		// .withPosition(0,
-		// 0)
-		// ).withGearRatio(SdsModuleConfigurations.MK4I_L2)
-		// .withDriveMotor(MotorType.FALCON, FRONT_LEFT_MODULE_DRIVE_MOTOR)
-		// .withSteerMotor(MotorType.FALCON, FRONT_LEFT_MODULE_STEER_MOTOR)
-		// .withSteerEncoderPort(FRONT_LEFT_MODULE_STEER_ENCODER)
-		// .withSteerOffset(FRONT_LEFT_MODULE_STEER_OFFSET)
-		// .build();
-		// frontRightModule = new MkSwerveModuleBuilder()
-		// .withLayout(
-		// tab.getLayout("Front Right Module", BuiltInLayouts.kList)
-		// .withSize(2, 4)
-		// .withPosition(2,
-		// 0)
-		// ).withGearRatio(SdsModuleConfigurations.MK4I_L2)
-		// .withDriveMotor(MotorType.FALCON, FRONT_RIGHT_MODULE_DRIVE_MOTOR)
-		// .withSteerMotor(MotorType.FALCON, FRONT_RIGHT_MODULE_STEER_MOTOR)
-		// .withSteerEncoderPort(FRONT_RIGHT_MODULE_STEER_ENCODER)
-		// .withSteerOffset(FRONT_RIGHT_MODULE_STEER_OFFSET)
-		// .build();
-		// backLeftModule = new MkSwerveModuleBuilder()
-		// .withLayout(
-		// tab.getLayout("Back Left Module", BuiltInLayouts.kList)
-		// .withSize(2, 4)
-		// .withPosition(4,
-		// 0)
-		// ).withGearRatio(SdsModuleConfigurations.MK4I_L2)
-		// .withDriveMotor(MotorType.FALCON, BACK_LEFT_MODULE_DRIVE_MOTOR)
-		// .withSteerMotor(MotorType.FALCON, BACK_LEFT_MODULE_STEER_MOTOR)
-		// .withSteerEncoderPort(BACK_LEFT_MODULE_STEER_ENCODER)
-		// .withSteerOffset(BACK_LEFT_MODULE_STEER_OFFSET)
-		// .build();
-		// backRightModule = new MkSwerveModuleBuilder()
-		// .withLayout(
-		// tab.getLayout("Back Right Module", BuiltInLayouts.kList)
-		// .withSize(2, 4)
-		// .withPosition(6,
-		// 0)
-		// ).withGearRatio(SdsModuleConfigurations.MK4I_L2)
-		// .withDriveMotor(MotorType.FALCON, BACK_RIGHT_MODULE_DRIVE_MOTOR)
-		// .withSteerMotor(MotorType.FALCON, BACK_RIGHT_MODULE_STEER_MOTOR)
-		// .withSteerEncoderPort(BACK_RIGHT_MODULE_STEER_ENCODER)
-		// .withSteerOffset(BACK_RIGHT_MODULE_STEER_OFFSET)
-		// .build();
+		frontLeftModule = new MkSwerveModuleBuilder()
+				.withLayout(tab.getLayout("Front Left Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(0, 0))
+				.withGearRatio(SdsModuleConfigurations.MK4I_L2)
+				.withDriveMotor(MotorType.FALCON, FRONT_LEFT_MODULE_DRIVE_MOTOR)
+				.withSteerMotor(MotorType.FALCON, FRONT_LEFT_MODULE_STEER_MOTOR)
+				.withSteerEncoderPort(FRONT_LEFT_MODULE_STEER_ENCODER).withSteerOffset(FRONT_LEFT_MODULE_STEER_OFFSET)
+				.build();
+		frontRightModule = new MkSwerveModuleBuilder()
+				.withLayout(tab.getLayout("Front Right Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(2, 0))
+				.withGearRatio(SdsModuleConfigurations.MK4I_L2)
+				.withDriveMotor(MotorType.FALCON, FRONT_RIGHT_MODULE_DRIVE_MOTOR)
+				.withSteerMotor(MotorType.FALCON, FRONT_RIGHT_MODULE_STEER_MOTOR)
+				.withSteerEncoderPort(FRONT_RIGHT_MODULE_STEER_ENCODER).withSteerOffset(FRONT_RIGHT_MODULE_STEER_OFFSET)
+				.build();
+		backLeftModule = new MkSwerveModuleBuilder()
+				.withLayout(tab.getLayout("Back Left Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(4, 0))
+				.withGearRatio(SdsModuleConfigurations.MK4I_L2)
+				.withDriveMotor(MotorType.FALCON, BACK_LEFT_MODULE_DRIVE_MOTOR)
+				.withSteerMotor(MotorType.FALCON, BACK_LEFT_MODULE_STEER_MOTOR)
+				.withSteerEncoderPort(BACK_LEFT_MODULE_STEER_ENCODER).withSteerOffset(BACK_LEFT_MODULE_STEER_OFFSET)
+				.build();
+		backRightModule = new MkSwerveModuleBuilder()
+				.withLayout(tab.getLayout("Back Right Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(6, 0))
+				.withGearRatio(SdsModuleConfigurations.MK4I_L2)
+				.withDriveMotor(MotorType.FALCON, BACK_RIGHT_MODULE_DRIVE_MOTOR)
+				.withSteerMotor(MotorType.FALCON, BACK_RIGHT_MODULE_STEER_MOTOR)
+				.withSteerEncoderPort(BACK_RIGHT_MODULE_STEER_ENCODER).withSteerOffset(BACK_RIGHT_MODULE_STEER_OFFSET)
+				.build();
 
-		frontLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
-				tab.getLayout("Front Left Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(0, 0),
-				Mk4iSwerveModuleHelper.GearRatio.L2, FRONT_LEFT_MODULE_DRIVE_MOTOR, FRONT_LEFT_MODULE_STEER_MOTOR,
-				FRONT_LEFT_MODULE_STEER_ENCODER, FRONT_LEFT_MODULE_STEER_OFFSET);
+		// frontLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
+		// tab.getLayout("Front Left Module", BuiltInLayouts.kList).withSize(2,
+		// 4).withPosition(0, 0),
+		// Mk4iSwerveModuleHelper.GearRatio.L2, FRONT_LEFT_MODULE_DRIVE_MOTOR,
+		// FRONT_LEFT_MODULE_STEER_MOTOR,
+		// FRONT_LEFT_MODULE_STEER_ENCODER, FRONT_LEFT_MODULE_STEER_OFFSET);
 
-		frontRightModule = Mk4iSwerveModuleHelper.createFalcon500(
-				tab.getLayout("Front Right Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(2, 0),
-				Mk4iSwerveModuleHelper.GearRatio.L2, FRONT_RIGHT_MODULE_DRIVE_MOTOR, FRONT_RIGHT_MODULE_STEER_MOTOR,
-				FRONT_RIGHT_MODULE_STEER_ENCODER, FRONT_RIGHT_MODULE_STEER_OFFSET);
+		// frontRightModule = Mk4iSwerveModuleHelper.createFalcon500(
+		// tab.getLayout("Front Right Module", BuiltInLayouts.kList).withSize(2,
+		// 4).withPosition(2, 0),
+		// Mk4iSwerveModuleHelper.GearRatio.L2, FRONT_RIGHT_MODULE_DRIVE_MOTOR,
+		// FRONT_RIGHT_MODULE_STEER_MOTOR,
+		// FRONT_RIGHT_MODULE_STEER_ENCODER, FRONT_RIGHT_MODULE_STEER_OFFSET);
 
-		backLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
-				tab.getLayout("Back Left Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(4, 0),
-				Mk4iSwerveModuleHelper.GearRatio.L2, BACK_LEFT_MODULE_DRIVE_MOTOR, BACK_LEFT_MODULE_STEER_MOTOR,
-				BACK_LEFT_MODULE_STEER_ENCODER, BACK_LEFT_MODULE_STEER_OFFSET);
+		// backLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
+		// tab.getLayout("Back Left Module", BuiltInLayouts.kList).withSize(2,
+		// 4).withPosition(4, 0),
+		// Mk4iSwerveModuleHelper.GearRatio.L2, BACK_LEFT_MODULE_DRIVE_MOTOR,
+		// BACK_LEFT_MODULE_STEER_MOTOR,
+		// BACK_LEFT_MODULE_STEER_ENCODER, BACK_LEFT_MODULE_STEER_OFFSET);
 
-		backRightModule = Mk4iSwerveModuleHelper.createFalcon500(
-				tab.getLayout("Back Right Module", BuiltInLayouts.kList).withSize(2, 4).withPosition(6, 0),
-				Mk4iSwerveModuleHelper.GearRatio.L2, BACK_RIGHT_MODULE_DRIVE_MOTOR, BACK_RIGHT_MODULE_STEER_MOTOR,
-				BACK_RIGHT_MODULE_STEER_ENCODER, BACK_RIGHT_MODULE_STEER_OFFSET);
+		// backRightModule = Mk4iSwerveModuleHelper.createFalcon500(
+		// tab.getLayout("Back Right Module", BuiltInLayouts.kList).withSize(2,
+		// 4).withPosition(6, 0),
+		// Mk4iSwerveModuleHelper.GearRatio.L2, BACK_RIGHT_MODULE_DRIVE_MOTOR,
+		// BACK_RIGHT_MODULE_STEER_MOTOR,
+		// BACK_RIGHT_MODULE_STEER_ENCODER, BACK_RIGHT_MODULE_STEER_OFFSET);
 
-        // driveOdometry = new SwerveDriveOdometry(
-        //     driveKinematics,
-		//     Rotation2d.fromDegrees(navX.getFusedHeading()),
-        //         new SwerveModulePosition[] {
-        //                 frontLeftModule.getPosition(),
-        //                 frontRightModule.getPosition(),
-        //                 backLeftModule.getPosition(),
-        //                 backRightModule.getPosition()
-        //         }
-        // );
+		driveOdometry = new SwerveDriveOdometry(driveKinematics, Rotation2d.fromDegrees(navX.getFusedHeading()),
+				new SwerveModulePosition[]{frontLeftModule.getPosition(), frontRightModule.getPosition(),
+						backLeftModule.getPosition(), backRightModule.getPosition()});
 
 		xController = new PIDController(0.8, 0, 0);
 		xController.setSetpoint(-3);
@@ -221,11 +202,11 @@ public class Drivetrain extends SubsystemBase {
 	 */
 	public void resetPose(Pose2d pose) {
 		// driveOdometry.resetPosition(
-		// 	getGyroscopeRotation(), new
-		// 	SwerveModulePosition[]{frontLeftModule.getPosition(),
-		// 	frontRightModule.getPosition(), backLeftModule.getPosition(),
-		// 	backRightModule.getPosition()},
-		// 	pose);
+		// getGyroscopeRotation(), new
+		// SwerveModulePosition[]{frontLeftModule.getPosition(),
+		// frontRightModule.getPosition(), backLeftModule.getPosition(),
+		// backRightModule.getPosition()},
+		// pose);
 	}
 
 	/**
