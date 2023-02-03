@@ -4,7 +4,6 @@ import org.mort11.subsystems.Drivetrain;
 import org.mort11.subsystems.Limelight;
 import org.mort11.util.Constants.LimelightPipeline;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 

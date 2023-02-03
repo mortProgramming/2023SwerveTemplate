@@ -63,6 +63,8 @@ public class Drivetrain extends SubsystemBase {
 
 	private PIDController rotateToAngleController;
 
+	private PIDController chargeStationController;
+
 	private static Drivetrain drivetrain;
 
 	public Drivetrain() {
@@ -157,6 +159,14 @@ public class Drivetrain extends SubsystemBase {
 		rotateToAngleController = new PIDController(0.07, 0, 0.001);
 		rotateToAngleController.setTolerance(0.5);
 		rotateToAngleController.enableContinuousInput(-180, 180);
+
+		chargeStationController = new PIDController(0.03, 0, 0);
+		chargeStationController.setTolerance(0.5);
+		chargeStationController.setSetpoint(0);
+	}
+
+	public PIDController getChargeStationController() {
+		return chargeStationController;
 	}
 
 	/** Sets the gyroscope angle to zero. */
@@ -201,12 +211,14 @@ public class Drivetrain extends SubsystemBase {
 	 * @param pose
 	 */
 	public void resetPose(Pose2d pose) {
-		// driveOdometry.resetPosition(
-		// getGyroscopeRotation(), new
-		// SwerveModulePosition[]{frontLeftModule.getPosition(),
-		// frontRightModule.getPosition(), backLeftModule.getPosition(),
-		// backRightModule.getPosition()},
-		// pose);
+		driveOdometry.resetPosition(Rotation2d.fromDegrees(navX.getFusedHeading()),
+				new SwerveModulePosition[]{frontLeftModule.getPosition(), frontRightModule.getPosition(),
+						backLeftModule.getPosition(), backRightModule.getPosition()},
+				pose);
+	}
+
+	public AHRS getNavX() {
+		return navX;
 	}
 
 	/**
@@ -254,12 +266,9 @@ public class Drivetrain extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		// driveOdometry.update(
-		// Rotation2d.fromDegrees(navX.getFusedHeading()),
-		// new SwerveModulePosition[]{ frontLeftModule.getPosition(),
-		// frontRightModule.getPosition(), backLeftModule.getPosition(),
-		// backRightModule.getPosition() }
-		// );
+		driveOdometry.update(Rotation2d.fromDegrees(navX.getFusedHeading()),
+				new SwerveModulePosition[]{frontLeftModule.getPosition(), frontRightModule.getPosition(),
+						backLeftModule.getPosition(), backRightModule.getPosition()});
 
 		SwerveModuleState[] states = driveKinematics.toSwerveModuleStates(chassisSpeeds);
 		setModuleStates(states);
