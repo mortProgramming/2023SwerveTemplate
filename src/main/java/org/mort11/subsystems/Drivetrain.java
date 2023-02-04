@@ -140,9 +140,12 @@ public class Drivetrain extends SubsystemBase {
 		// BACK_RIGHT_MODULE_STEER_MOTOR,
 		// BACK_RIGHT_MODULE_STEER_ENCODER, BACK_RIGHT_MODULE_STEER_OFFSET);
 
-		driveOdometry = new SwerveDriveOdometry(driveKinematics, Rotation2d.fromDegrees(navX.getFusedHeading()),
-				new SwerveModulePosition[]{frontLeftModule.getPosition(), frontRightModule.getPosition(),
-						backLeftModule.getPosition(), backRightModule.getPosition()});
+
+		//todo: wait, try the other
+		// driveOdometry = new SwerveDriveOdometry(driveKinematics, Rotation2d.fromDegrees(navX.getFusedHeading()),
+		// 		getModulePositions());
+		
+		driveOdometry = new SwerveDriveOdometry(driveKinematics, getGyroscopeRotation(), getModulePositions());
 
 		xController = new PIDController(0.8, 0, 0);
 		xController.setSetpoint(-3);
@@ -211,10 +214,20 @@ public class Drivetrain extends SubsystemBase {
 	 * @param pose
 	 */
 	public void resetPose(Pose2d pose) {
-		driveOdometry.resetPosition(Rotation2d.fromDegrees(navX.getFusedHeading()),
-				new SwerveModulePosition[]{frontLeftModule.getPosition(), frontRightModule.getPosition(),
-						backLeftModule.getPosition(), backRightModule.getPosition()},
-				pose);
+		// driveOdometry.resetPosition(Rotation2d.fromDegrees(navX.getFusedHeading()),
+		// 		getModulePositions(),
+		// 		pose);
+
+		// //todo: try this
+		// /*
+		driveOdometry.resetPosition(getGyroscopeRotation(), getModulePositions(), pose);
+
+		//  */
+	}
+
+	public SwerveModulePosition[] getModulePositions() {
+		return new SwerveModulePosition[] { frontLeftModule.getPosition(), frontRightModule.getPosition(),
+				backLeftModule.getPosition(), backRightModule.getPosition() };
 	}
 
 	public AHRS getNavX() {
@@ -267,8 +280,7 @@ public class Drivetrain extends SubsystemBase {
 	@Override
 	public void periodic() {
 		driveOdometry.update(Rotation2d.fromDegrees(navX.getFusedHeading()),
-				new SwerveModulePosition[]{frontLeftModule.getPosition(), frontRightModule.getPosition(),
-						backLeftModule.getPosition(), backRightModule.getPosition()});
+				getModulePositions());
 
 		SwerveModuleState[] states = driveKinematics.toSwerveModuleStates(chassisSpeeds);
 		setModuleStates(states);

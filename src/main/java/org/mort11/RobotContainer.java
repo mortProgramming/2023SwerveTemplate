@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 
 import org.mort11.commands.BalanceStation;
 import org.mort11.commands.DriveControl;
+import org.mort11.commands.DriveToAprilTag;
 import org.mort11.subsystems.Drivetrain;
 import org.mort11.subsystems.Limelight;
 
@@ -34,15 +36,19 @@ public class RobotContainer {
 	// XboxController(CONTROLLER_PORT);
 	private final Joystick joystick = new Joystick(JOYSTICK_PORT);
 
+	private DigitalInput sensor;
+
 	public RobotContainer() {
 		drivetrain.setDefaultCommand(new DriveControl(
-				() -> -modifyAxis(joystick.getY(), joystick.getThrottle()) * MAX_VELOCITY_METERS_PER_SECOND,
 				() -> -modifyAxis(joystick.getX(), joystick.getThrottle()) * MAX_VELOCITY_METERS_PER_SECOND,
+				() -> -modifyAxis(joystick.getY(), joystick.getThrottle()) * MAX_VELOCITY_METERS_PER_SECOND,
 				() -> -modifyAxis(joystick.getTwist(), joystick.getThrottle())
 						* MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
 
 		configureButtonBindings();
 		drivetrain.resetPose(new Pose2d(0, 0, new Rotation2d(0, 0)));
+
+		sensor = new DigitalInput(0);
 		// drivetrain.zeroGyroscope();
 	}
 
@@ -52,6 +58,8 @@ public class RobotContainer {
 		SmartDashboard.putNumber("yaw", drivetrain.getNavX().getYaw());
 		SmartDashboard.putNumber("pitch", drivetrain.getNavX().getPitch());
 		SmartDashboard.putNumber("roll", drivetrain.getNavX().getRoll());
+
+		SmartDashboard.putBoolean("ir sensor", sensor.get());
 	}
 
 	/**
@@ -68,30 +76,6 @@ public class RobotContainer {
 	}
 
 	public Command getAutonomousCommand() {
-		// PathPlannerTrajectory traj = PathPlanner.loadPath("Test4", 2, 1);
-
-		// return new SequentialCommandGroup(new InstantCommand(() -> {
-		// // Reset odometry for the first path you run during auto
-		// if (true) {
-		// drivetrain.resetPose(traj.getInitialHolonomicPose());
-		// }
-		// }), new PPSwerveControllerCommand(traj, drivetrain::getPose, // Pose supplier
-		// drivetrain.driveKinematics, // SwerveDriveKinematics
-		// new PIDController(.25, 0, 0), // X controller. Tune these values for your
-		// robot. Leaving them 0 will only
-		// // use feedforwards.
-		// new PIDController(0.2, 0, 0), // Y controller (usually the same values as X
-		// controller)
-		// new PIDController(1, 0, 0), // Rotation controller. Tune these values for
-		// your robot. Leaving them 0
-		// // will only use feedforwards.
-		// drivetrain::setModuleStates, // Module states consumer
-		// false, // Should the path be automatically mirrored depending on alliance
-		// color.
-		// // Optional, defaults to true
-		// drivetrain // Requires this drive subsystem
-		// ));
-
 		ArrayList<PathPlannerTrajectory> pathGroup = (ArrayList<PathPlannerTrajectory>) PathPlanner
 				.loadPathGroup("Test5", new PathConstraints(2, 1));
 
@@ -99,6 +83,7 @@ public class RobotContainer {
 		// global event map
 		// in your code that will be used by all path following commands.
 		HashMap<String, Command> eventMap = new HashMap<>();
+		eventMap.put("tag", new DriveToAprilTag(0));
 
 		// Create the AutoBuilder. This only needs to be created once when robot code
 		// starts, not every time you want to create an auto command. A good place to
@@ -106,9 +91,8 @@ public class RobotContainer {
 		SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(drivetrain::getPose, // Pose2d supplier
 				drivetrain::resetPose, // Pose2d consumer, used to reset odometry at the beginning of auto
 				drivetrain.driveKinematics, // SwerveDriveKinematics
-				new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X
-													// and Y PID controllers)
-				new PIDConstants(-3.1, 0.0, 0.0), // PID constants to correct for rotation error (used to create the
+				new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+				new PIDConstants(0, 0.0, 0.0), // PID constants to correct for rotation error (used to create the
 													// rotation controller)
 				drivetrain::setModuleStates, // Module states consumer used to output to the drive subsystem
 				eventMap, false, // Should the path be automatically mirrored depending on alliance color.
@@ -116,6 +100,8 @@ public class RobotContainer {
 				drivetrain // The drive subsystem. Used to properly set the requirements of path following
 							// commands
 		);
+
+		//todo: zero gyro??
 
 		return autoBuilder.fullAuto(pathGroup);
 	}

@@ -21,17 +21,17 @@ public final class Constants {
 		public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 6;
 		public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 3;
 		public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 9;
-		public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(37 - 180 - 90);
+		public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(134);
 		// Back Left
 		public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 4;
 		public static final int BACK_LEFT_MODULE_STEER_MOTOR = 0;
 		public static final int BACK_LEFT_MODULE_STEER_ENCODER = 10;
-		public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(17);
+		public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(18);
 		// Back Right
 		public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 2;
 		public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 1;
 		public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 11;
-		public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(311);
+		public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(306);
 	}
 
 	public static final class DrivetrainSpecs {
@@ -61,9 +61,9 @@ public final class Constants {
 	}
 
 	public enum LimelightPipeline {
-		APRILTAG(0), // id 0
-		REFLECTIVE(1), // id 1
-		DRIVER(2); // id 2
+		APRILTAG(1), 
+		REFLECTIVE(2),
+		DRIVER(3); 
 
 		private final int id;
 
