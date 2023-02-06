@@ -42,6 +42,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drivetrain extends SubsystemBase {
@@ -140,11 +141,11 @@ public class Drivetrain extends SubsystemBase {
 		// BACK_RIGHT_MODULE_STEER_MOTOR,
 		// BACK_RIGHT_MODULE_STEER_ENCODER, BACK_RIGHT_MODULE_STEER_OFFSET);
 
+		// todo: wait, try the other
+		// driveOdometry = new SwerveDriveOdometry(driveKinematics,
+		// Rotation2d.fromDegrees(navX.getFusedHeading()),
+		// getModulePositions());
 
-		//todo: wait, try the other
-		// driveOdometry = new SwerveDriveOdometry(driveKinematics, Rotation2d.fromDegrees(navX.getFusedHeading()),
-		// 		getModulePositions());
-		
 		driveOdometry = new SwerveDriveOdometry(driveKinematics, getGyroscopeRotation(), getModulePositions());
 
 		xController = new PIDController(0.8, 0, 0);
@@ -215,19 +216,19 @@ public class Drivetrain extends SubsystemBase {
 	 */
 	public void resetPose(Pose2d pose) {
 		// driveOdometry.resetPosition(Rotation2d.fromDegrees(navX.getFusedHeading()),
-		// 		getModulePositions(),
-		// 		pose);
+		// getModulePositions(),
+		// pose);
 
 		// //todo: try this
 		// /*
 		driveOdometry.resetPosition(getGyroscopeRotation(), getModulePositions(), pose);
 
-		//  */
+		// */
 	}
 
 	public SwerveModulePosition[] getModulePositions() {
-		return new SwerveModulePosition[] { frontLeftModule.getPosition(), frontRightModule.getPosition(),
-				backLeftModule.getPosition(), backRightModule.getPosition() };
+		return new SwerveModulePosition[]{frontLeftModule.getPosition(), frontRightModule.getPosition(),
+				backLeftModule.getPosition(), backRightModule.getPosition()};
 	}
 
 	public AHRS getNavX() {
@@ -279,11 +280,12 @@ public class Drivetrain extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		driveOdometry.update(Rotation2d.fromDegrees(navX.getFusedHeading()),
-				getModulePositions());
+		driveOdometry.update(Rotation2d.fromDegrees(navX.getFusedHeading()), getModulePositions());
 
 		SwerveModuleState[] states = driveKinematics.toSwerveModuleStates(chassisSpeeds);
 		setModuleStates(states);
+
+		Shuffleboard.getTab("dt").add(drivetrain);
 	}
 
 	public static Drivetrain getInstance() {

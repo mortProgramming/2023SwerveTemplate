@@ -61,9 +61,7 @@ public final class Constants {
 	}
 
 	public enum LimelightPipeline {
-		APRILTAG(1), 
-		REFLECTIVE(2),
-		DRIVER(3); 
+		APRILTAG(1), REFLECTIVE(2), DRIVER(3);
 
 		private final int id;
 

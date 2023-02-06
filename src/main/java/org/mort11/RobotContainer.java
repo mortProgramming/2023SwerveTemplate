@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -60,6 +61,7 @@ public class RobotContainer {
 		SmartDashboard.putNumber("roll", drivetrain.getNavX().getRoll());
 
 		SmartDashboard.putBoolean("ir sensor", sensor.get());
+
 	}
 
 	/**
@@ -70,6 +72,10 @@ public class RobotContainer {
 		// InstantCommand(drivetrain::zeroGyroscope));
 		new Trigger(joystick::getTrigger).whileTrue(new InstantCommand(drivetrain::zeroGyroscope));
 		new Trigger(() -> joystick.getRawButton(2)).whileTrue(new BalanceStation());
+		new Trigger(() -> joystick.getRawButton(3)).whileTrue(
+				new InstantCommand(() -> drivetrain.drive(new ChassisSpeeds(SmartDashboard.getNumber("vx", 0),
+						SmartDashboard.getNumber("vy", 0), SmartDashboard.getNumber("omega", 0)))));
+
 		// new Trigger(joystick::getTrigger).whileTrue(new DriveToAprilTag(1));
 		// new Trigger(joystick::getTrigger).whileTrue(new RotateToAngle(90, false));
 
@@ -77,13 +83,14 @@ public class RobotContainer {
 
 	public Command getAutonomousCommand() {
 		ArrayList<PathPlannerTrajectory> pathGroup = (ArrayList<PathPlannerTrajectory>) PathPlanner
-				.loadPathGroup("Test5", new PathConstraints(2, 1));
+				.loadPathGroup("Test7", new PathConstraints(2, 1));
 
 		// This is just an example event map. It would be better to have a constant,
 		// global event map
 		// in your code that will be used by all path following commands.
 		HashMap<String, Command> eventMap = new HashMap<>();
 		eventMap.put("tag", new DriveToAprilTag(0));
+		eventMap.put("balance", new BalanceStation());
 
 		// Create the AutoBuilder. This only needs to be created once when robot code
 		// starts, not every time you want to create an auto command. A good place to
@@ -91,8 +98,9 @@ public class RobotContainer {
 		SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(drivetrain::getPose, // Pose2d supplier
 				drivetrain::resetPose, // Pose2d consumer, used to reset odometry at the beginning of auto
 				drivetrain.driveKinematics, // SwerveDriveKinematics
-				new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
-				new PIDConstants(0, 0.0, 0.0), // PID constants to correct for rotation error (used to create the
+				new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X
+													// and Y PID controllers)
+				new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the
 													// rotation controller)
 				drivetrain::setModuleStates, // Module states consumer used to output to the drive subsystem
 				eventMap, false, // Should the path be automatically mirrored depending on alliance color.
@@ -101,7 +109,7 @@ public class RobotContainer {
 							// commands
 		);
 
-		//todo: zero gyro??
+		// todo: zero gyro??
 
 		return autoBuilder.fullAuto(pathGroup);
 	}

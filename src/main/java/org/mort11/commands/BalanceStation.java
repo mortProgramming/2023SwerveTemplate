@@ -22,14 +22,12 @@ public class BalanceStation extends CommandBase {
 	@Override
 	public void execute() {
 
-		if(Math.abs(drivetrain.getNavX().getPitch()) > 0.5){
-			drivetrain.drive(new ChassisSpeeds(
-				0, drivetrain.getChargeStationController().calculate(-drivetrain.getNavX().getPitch()), 0
-			));
+		if (Math.abs(drivetrain.getNavX().getPitch()) > 0.5) {
+			drivetrain.drive(new ChassisSpeeds(0,
+					drivetrain.getChargeStationController().calculate(-drivetrain.getNavX().getPitch()), 0));
 		} else if (Math.abs(drivetrain.getNavX().getRoll()) > 0.5) {
 			drivetrain.drive(new ChassisSpeeds(
-					drivetrain.getChargeStationController().calculate(-drivetrain.getNavX().getRoll()), 0, 0
-			));
+					drivetrain.getChargeStationController().calculate(-drivetrain.getNavX().getRoll()), 0, 0));
 		}
 
 	}
