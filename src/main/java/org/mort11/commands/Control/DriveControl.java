@@ -1,4 +1,4 @@
-package org.mort11.commands;
+package org.mort11.commands.Control;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -26,15 +26,15 @@ public class DriveControl extends CommandBase {
 	public void execute() {
 
 		// // robot-oriented drive
-		drivetrain.drive(new ChassisSpeeds(translationXSupplier.getAsDouble(), translationYSupplier.getAsDouble(),
-				rotationSupplier.getAsDouble()));
-		// drivetrain.drive(
-		// ChassisSpeeds.fromFieldRelativeSpeeds(
-		// translationXSupplier.getAsDouble(),
-		// translationYSupplier.getAsDouble(),
-		// rotationSupplier.getAsDouble(),
-		// drivetrain.getGyroscopeRotation())
-		// );
+		// drivetrain.drive(new ChassisSpeeds(translationXSupplier.getAsDouble(), translationYSupplier.getAsDouble(),
+		// 		rotationSupplier.getAsDouble()));
+		drivetrain.drive(
+			ChassisSpeeds.fromFieldRelativeSpeeds(
+				translationXSupplier.getAsDouble(),
+				translationYSupplier.getAsDouble(),
+				rotationSupplier.getAsDouble(),
+				drivetrain.getGyroscopeRotation())
+		);
 	}
 
 	@Override

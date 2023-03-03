@@ -17,16 +17,17 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import static org.mort11.util.Constants.DrivetrainSpecs.*;
-import static org.mort11.util.Constants.OperatorConstants.*;
+import org.mort11.util.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.mort11.commands.BalanceStation;
-import org.mort11.commands.DriveControl;
-import org.mort11.commands.DriveToAprilTag;
+import org.mort11.util.Control;
+import org.mort11.commands.Control.DriveControl;
+import org.mort11.commands.Sumeet.BalanceStation;
+import org.mort11.commands.Sumeet.DriveToAprilTag;
 import org.mort11.subsystems.Drivetrain;
 import org.mort11.subsystems.Limelight;
+import org.mort11.util.Auto;
 
 public class RobotContainer {
 	private final Drivetrain drivetrain = Drivetrain.getInstance();
@@ -35,22 +36,25 @@ public class RobotContainer {
 
 	// private final XboxController xboxController = new
 	// XboxController(CONTROLLER_PORT);
-	private final Joystick joystick = new Joystick(JOYSTICK_PORT);
+	private final Joystick joystick = new Joystick(Constants.LEFT_JOYSTICK);
 
 	private DigitalInput sensor;
 
 	public RobotContainer() {
+		Control.init();
+
 		drivetrain.setDefaultCommand(new DriveControl(
-				() -> -modifyAxis(joystick.getX(), joystick.getThrottle()) * MAX_VELOCITY_METERS_PER_SECOND,
+				() -> -modifyAxis(-joystick.getX(), joystick.getThrottle()) * MAX_VELOCITY_METERS_PER_SECOND,
 				() -> -modifyAxis(joystick.getY(), joystick.getThrottle()) * MAX_VELOCITY_METERS_PER_SECOND,
 				() -> -modifyAxis(joystick.getTwist(), joystick.getThrottle())
 						* MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
 
-		configureButtonBindings();
+		Control.configureBindings();
 		drivetrain.resetPose(new Pose2d(0, 0, new Rotation2d(0, 0)));
 
 		sensor = new DigitalInput(0);
 		// drivetrain.zeroGyroscope();
+		Auto.init();
 	}
 
 	public void displaySmartDashboard() {
@@ -67,52 +71,19 @@ public class RobotContainer {
 	/**
 	 *
 	 */
-	private void configureButtonBindings() {
-		// new Button(joystick::getTrigger).whenPressed(new
-		// InstantCommand(drivetrain::zeroGyroscope));
-		new Trigger(joystick::getTrigger).whileTrue(new InstantCommand(drivetrain::zeroGyroscope));
-		new Trigger(() -> joystick.getRawButton(2)).whileTrue(new BalanceStation());
-		new Trigger(() -> joystick.getRawButton(3)).whileTrue(
-				new InstantCommand(() -> drivetrain.drive(new ChassisSpeeds(SmartDashboard.getNumber("vx", 0),
-						SmartDashboard.getNumber("vy", 0), SmartDashboard.getNumber("omega", 0)))));
+	// private void configureButtonBindings() {
+	// 	// new Button(joystick::getTrigger).whenPressed(new
+	// 	// InstantCommand(drivetrain::zeroGyroscope));
+	// 	new Trigger(joystick::getTrigger).whileTrue(new InstantCommand(drivetrain::zeroGyroscope));
+	// 	new Trigger(() -> joystick.getRawButton(2)).whileTrue(new BalanceStation());
+	// 	new Trigger(() -> joystick.getRawButton(3)).whileTrue(
+	// 			new InstantCommand(() -> drivetrain.drive(new ChassisSpeeds(SmartDashboard.getNumber("vx", 0),
+	// 					SmartDashboard.getNumber("vy", 0), SmartDashboard.getNumber("omega", 0)))));
 
-		// new Trigger(joystick::getTrigger).whileTrue(new DriveToAprilTag(1));
-		// new Trigger(joystick::getTrigger).whileTrue(new RotateToAngle(90, false));
+	// 	// new Trigger(joystick::getTrigger).whileTrue(new DriveToAprilTag(1));
+	// 	// new Trigger(joystick::getTrigger).whileTrue(new RotateToAngle(90, false));
 
-	}
-
-	public Command getAutonomousCommand() {
-		ArrayList<PathPlannerTrajectory> pathGroup = (ArrayList<PathPlannerTrajectory>) PathPlanner
-				.loadPathGroup("Test7", new PathConstraints(2, 1));
-
-		// This is just an example event map. It would be better to have a constant,
-		// global event map
-		// in your code that will be used by all path following commands.
-		HashMap<String, Command> eventMap = new HashMap<>();
-		eventMap.put("tag", new DriveToAprilTag(0));
-		eventMap.put("balance", new BalanceStation());
-
-		// Create the AutoBuilder. This only needs to be created once when robot code
-		// starts, not every time you want to create an auto command. A good place to
-		// put this is in RobotContainer along with your subsystems.
-		SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(drivetrain::getPose, // Pose2d supplier
-				drivetrain::resetPose, // Pose2d consumer, used to reset odometry at the beginning of auto
-				drivetrain.driveKinematics, // SwerveDriveKinematics
-				new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X
-													// and Y PID controllers)
-				new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the
-													// rotation controller)
-				drivetrain::setModuleStates, // Module states consumer used to output to the drive subsystem
-				eventMap, false, // Should the path be automatically mirrored depending on alliance color.
-									// Optional, defaults to true
-				drivetrain // The drive subsystem. Used to properly set the requirements of path following
-							// commands
-		);
-
-		// todo: zero gyro??
-
-		return autoBuilder.fullAuto(pathGroup);
-	}
+	// }
 
 	private static double deadband(double value, double deadband) {
 		if (Math.abs(value) > deadband) {
@@ -139,4 +110,22 @@ public class RobotContainer {
 		return value * (throttleValue * -0.4 + 0.6);
 	}
 
+	private static double modifyAxis2(double value, double throttleValue) {
+		// Deadband
+		value = deadband(value, 0.1);
+
+		// Square the axis
+		value = Math.copySign(value * value, value);
+
+		throttleValue = (throttleValue + 1) / 2;
+
+		double minValue = 0.2;
+		double maxValue = 0.6;
+		return value * (throttleValue * (maxValue - minValue) + minValue);
+	}
+
+	public Command getAutonomousCommand() {
+		// An ExampleCommand will run in autonomous
+		return Auto.getSelected();
+	}
 }

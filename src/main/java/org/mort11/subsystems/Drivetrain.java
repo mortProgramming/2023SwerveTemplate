@@ -66,6 +66,11 @@ public class Drivetrain extends SubsystemBase {
 
 	private PIDController chargeStationController;
 
+	private PIDController angleRotateController;
+
+	private int runThroughNum = 0;
+	private double initialYaw;
+
 	private static Drivetrain drivetrain;
 
 	public Drivetrain() {
@@ -152,7 +157,7 @@ public class Drivetrain extends SubsystemBase {
 		xController.setSetpoint(-3);
 		xController.setTolerance(0.1);
 
-		yController = new PIDController(.41, 0, 0);
+		yController = new PIDController(0.41, 0, 0);
 		yController.setSetpoint(0);
 		yController.setTolerance(0.1);
 
@@ -167,6 +172,10 @@ public class Drivetrain extends SubsystemBase {
 		chargeStationController = new PIDController(0.03, 0, 0);
 		chargeStationController.setTolerance(0.5);
 		chargeStationController.setSetpoint(0);
+
+		angleRotateController = new PIDController(0.06, 0, 0);
+		angleRotateController.setTolerance(1, 10);
+		angleRotateController.enableContinuousInput(-180, 180);
 	}
 
 	public PIDController getChargeStationController() {
@@ -278,6 +287,15 @@ public class Drivetrain extends SubsystemBase {
 		return rotateToAngleController;
 	}
 
+	public PIDController angleRotateController() {
+		return angleRotateController;
+	}
+
+	public boolean angleRotateSetpoint() {
+		runThroughNum = 0;
+		return angleRotateController.atSetpoint();
+	}
+
 	@Override
 	public void periodic() {
 		driveOdometry.update(Rotation2d.fromDegrees(navX.getFusedHeading()), getModulePositions());
@@ -285,7 +303,7 @@ public class Drivetrain extends SubsystemBase {
 		SwerveModuleState[] states = driveKinematics.toSwerveModuleStates(chassisSpeeds);
 		setModuleStates(states);
 
-		Shuffleboard.getTab("dt").add(drivetrain);
+		// Shuffleboard.getTab("dt").add(drivetrain);
 	}
 
 	public static Drivetrain getInstance() {

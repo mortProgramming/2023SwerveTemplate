@@ -1,4 +1,4 @@
-package org.mort11.commands;
+package org.mort11.commands.Sumeet;
 
 import org.mort11.subsystems.Drivetrain;
 import org.mort11.subsystems.Limelight;

@@ -4,12 +4,12 @@ import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
-	public static final class OperatorConstants {
-		public static final int JOYSTICK_PORT = 0;
-		public static final int CONTROLLER_PORT = 2;
 
-		public static final int RESET_GYRO_BUTTON = 1; // on joystick 0
-	}
+	public static final int LEFT_JOYSTICK = 0;
+	public static final int RIGHT_JOYSTICK = 1;
+	public static final int XBOX_CONTROLLER = 2;
+
+	public static final int RESET_GYRO_BUTTON = 1; // on joystick 0
 
 	public static final class DrivetrainMotors {
 		// Front Left
@@ -73,4 +73,7 @@ public final class Constants {
 			return id;
 		}
 	}
+
+	public static final double MAX_VELOCITY_AUTO = 4;
+	public static final double MAX_ACCELERATION_AUTO = 3;
 }

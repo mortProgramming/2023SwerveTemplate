@@ -1,4 +1,4 @@
-package org.mort11.commands;
+package org.mort11.commands.Sumeet;
 
 import java.io.IOException;
 import java.nio.file.Path;
