@@ -7,12 +7,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class Tester extends SequentialCommandGroup {
 
-    public Tester() {
+	public Tester() {
 
-        addCommands(
-            new SequentialCommandGroup(
-                new AngleRotate(90)
-            )
-        );
-    }
+		addCommands(new SequentialCommandGroup(new AngleRotate(90)));
+	}
 }

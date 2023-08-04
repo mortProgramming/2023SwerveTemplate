@@ -72,16 +72,18 @@ public class RobotContainer {
 	 *
 	 */
 	// private void configureButtonBindings() {
-	// 	// new Button(joystick::getTrigger).whenPressed(new
-	// 	// InstantCommand(drivetrain::zeroGyroscope));
-	// 	new Trigger(joystick::getTrigger).whileTrue(new InstantCommand(drivetrain::zeroGyroscope));
-	// 	new Trigger(() -> joystick.getRawButton(2)).whileTrue(new BalanceStation());
-	// 	new Trigger(() -> joystick.getRawButton(3)).whileTrue(
-	// 			new InstantCommand(() -> drivetrain.drive(new ChassisSpeeds(SmartDashboard.getNumber("vx", 0),
-	// 					SmartDashboard.getNumber("vy", 0), SmartDashboard.getNumber("omega", 0)))));
+	// // new Button(joystick::getTrigger).whenPressed(new
+	// // InstantCommand(drivetrain::zeroGyroscope));
+	// new Trigger(joystick::getTrigger).whileTrue(new
+	// InstantCommand(drivetrain::zeroGyroscope));
+	// new Trigger(() -> joystick.getRawButton(2)).whileTrue(new BalanceStation());
+	// new Trigger(() -> joystick.getRawButton(3)).whileTrue(
+	// new InstantCommand(() -> drivetrain.drive(new
+	// ChassisSpeeds(SmartDashboard.getNumber("vx", 0),
+	// SmartDashboard.getNumber("vy", 0), SmartDashboard.getNumber("omega", 0)))));
 
-	// 	// new Trigger(joystick::getTrigger).whileTrue(new DriveToAprilTag(1));
-	// 	// new Trigger(joystick::getTrigger).whileTrue(new RotateToAngle(90, false));
+	// // new Trigger(joystick::getTrigger).whileTrue(new DriveToAprilTag(1));
+	// // new Trigger(joystick::getTrigger).whileTrue(new RotateToAngle(90, false));
 
 	// }
 

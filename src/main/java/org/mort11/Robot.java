@@ -41,9 +41,9 @@ public class Robot extends TimedRobot {
 		m_autonomousCommand = Auto.getSelected();
 		// schedule the autonomous command (example)
 		if (m_autonomousCommand != null) {
-		  m_autonomousCommand.schedule();
+			m_autonomousCommand.schedule();
 		}
-	  }
+	}
 
 	@Override
 	public void autonomousPeriodic() {

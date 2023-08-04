@@ -3,6 +3,7 @@ package org.mort11.util;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.mort11.commands.Auton.Forward;
 import org.mort11.commands.Auton.OtherOne;
 import org.mort11.commands.Auton.Tester;
 import org.mort11.subsystems.Drivetrain;
@@ -59,8 +60,8 @@ public class Auto {
 	public static void addAutoOptions() {
 		// By default, the nothing option is selected
 		// autoChooser.setDefaultOption("nothing", null);
-        // autoChooser.setDefaultOption("Tester", new Tester());
-		autoChooser.setDefaultOption("Tester", new OtherOne());
+		// autoChooser.setDefaultOption("Tester", new Tester());
+		autoChooser.setDefaultOption("Forward", new Forward());
 		// autoChooser.addOption("Test", autoFromPathGroup("Test"));
 	}
 
@@ -69,8 +70,8 @@ public class Auto {
 	}
 
 	public static CommandBase autoFromPathGroup(String name) {
-		return autoBuilder.fullAuto(
-				PathPlanner.loadPathGroup(name, new PathConstraints(Constants.MAX_VELOCITY_AUTO, Constants.MAX_ACCELERATION_AUTO)));
+		return autoBuilder.fullAuto(PathPlanner.loadPathGroup(name,
+				new PathConstraints(Constants.MAX_VELOCITY_AUTO, Constants.MAX_ACCELERATION_AUTO)));
 	}
 
 	public static CommandBase autoFromPathGroup(ArrayList<PathPlannerTrajectory> paths) {
@@ -85,7 +86,8 @@ public class Auto {
 		ArrayList<PathPlannerTrajectory> paths = new ArrayList<PathPlannerTrajectory>();
 
 		for (String n : names) {
-			paths.add(PathPlanner.loadPath(n, new PathConstraints(Constants.MAX_VELOCITY_AUTO, Constants.MAX_ACCELERATION_AUTO)));
+			paths.add(PathPlanner.loadPath(n,
+					new PathConstraints(Constants.MAX_VELOCITY_AUTO, Constants.MAX_ACCELERATION_AUTO)));
 		}
 
 		return paths;
