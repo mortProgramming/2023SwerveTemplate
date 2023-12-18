@@ -8,11 +8,11 @@ import org.mort11.commands.Auton.OtherOne;
 import org.mort11.commands.Auton.Tester;
 import org.mort11.subsystems.Drivetrain;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.auto.PIDConstants;
-import com.pathplanner.lib.auto.SwerveAutoBuilder;
+// import com.pathplanner.lib.PathConstraints;
+// import com.pathplanner.lib.PathPlanner;
+// import com.pathplanner.lib.PathPlannerTrajectory;
+// import com.pathplanner.lib.auto.PIDConstants;
+// import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,7 +26,7 @@ public class Auto {
 
 	private static HashMap<String, Command> eventMap;
 
-	private static SwerveAutoBuilder autoBuilder;
+	// private static SwerveAutoBuilder autoBuilder;
 
 	private static SendableChooser<Command> autoChooser;
 
@@ -36,19 +36,25 @@ public class Auto {
 
 		drivetrain = Drivetrain.getInstance();
 
-		autoBuilder = new SwerveAutoBuilder(drivetrain::getPose, // Pose2d supplier
-				drivetrain::resetPose, // Pose2d consumer, used to reset odometry at the beginning of auto
-				drivetrain.driveKinematics, // SwerveDriveKinematics
-				new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation error (used to create the X
-													// and Y PID controllers)
-				new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the
-													// rotation controller)
-				drivetrain::setModuleStates, // Module states consumer used to output to the drive subsystem
-				eventMap, false, // Should the path be automatically mirrored depending on alliance color.
-									// Optional, defaults to true
-				drivetrain // The drive subsystem. Used to properly set the requirements of path following
-							// commands
-		);
+		// autoBuilder = new SwerveAutoBuilder(drivetrain::getPose, // Pose2d supplier
+		// drivetrain::resetPose, // Pose2d consumer, used to reset odometry at the
+		// beginning of auto
+		// drivetrain.driveKinematics, // SwerveDriveKinematics
+		// new PIDConstants(5.0, 0.0, 0.0), // PID constants to correct for translation
+		// error (used to create the X
+		// // and Y PID controllers)
+		// new PIDConstants(0.5, 0.0, 0.0), // PID constants to correct for rotation
+		// error (used to create the
+		// // rotation controller)
+		// drivetrain::setModuleStates, // Module states consumer used to output to the
+		// drive subsystem
+		// eventMap, false, // Should the path be automatically mirrored depending on
+		// alliance color.
+		// // Optional, defaults to true
+		// drivetrain // The drive subsystem. Used to properly set the requirements of
+		// path following
+		// // commands
+		// );
 
 		autoChooser = new SendableChooser<Command>();
 		addAutoOptions();
@@ -69,29 +75,34 @@ public class Auto {
 		eventMap.put(null, null);
 	}
 
-	public static CommandBase autoFromPathGroup(String name) {
-		return autoBuilder.fullAuto(PathPlanner.loadPathGroup(name,
-				new PathConstraints(Constants.MAX_VELOCITY_AUTO, Constants.MAX_ACCELERATION_AUTO)));
-	}
+	// public static CommandBase autoFromPathGroup(String name) {
+	// return autoBuilder.fullAuto(PathPlanner.loadPathGroup(name,
+	// new PathConstraints(Constants.MAX_VELOCITY_AUTO,
+	// Constants.MAX_ACCELERATION_AUTO)));
+	// }
 
-	public static CommandBase autoFromPathGroup(ArrayList<PathPlannerTrajectory> paths) {
-		return autoBuilder.fullAuto(paths);
-	}
+	// public static CommandBase autoFromPathGroup(ArrayList<PathPlannerTrajectory>
+	// paths) {
+	// return autoBuilder.fullAuto(paths);
+	// }
 
-	public static CommandBase autoFromPaths(ArrayList<String> names) {
-		return autoFromPathGroup(createPathGroup(names));
-	}
+	// public static CommandBase autoFromPaths(ArrayList<String> names) {
+	// return autoFromPathGroup(createPathGroup(names));
+	// }
 
-	public static ArrayList<PathPlannerTrajectory> createPathGroup(ArrayList<String> names) {
-		ArrayList<PathPlannerTrajectory> paths = new ArrayList<PathPlannerTrajectory>();
+	// public static ArrayList<PathPlannerTrajectory>
+	// createPathGroup(ArrayList<String> names) {
+	// ArrayList<PathPlannerTrajectory> paths = new
+	// ArrayList<PathPlannerTrajectory>();
 
-		for (String n : names) {
-			paths.add(PathPlanner.loadPath(n,
-					new PathConstraints(Constants.MAX_VELOCITY_AUTO, Constants.MAX_ACCELERATION_AUTO)));
-		}
+	// for (String n : names) {
+	// paths.add(PathPlanner.loadPath(n,
+	// new PathConstraints(Constants.MAX_VELOCITY_AUTO,
+	// Constants.MAX_ACCELERATION_AUTO)));
+	// }
 
-		return paths;
-	}
+	// return paths;
+	// }
 
 	/**
 	 * @return selected auto from auto chooser

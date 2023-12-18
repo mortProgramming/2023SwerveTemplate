@@ -26,11 +26,13 @@ public class DriveControl extends CommandBase {
 	public void execute() {
 
 		// // robot-oriented drive
-		drivetrain.drive(new ChassisSpeeds(translationXSupplier.getAsDouble(), translationYSupplier.getAsDouble(),
-				rotationSupplier.getAsDouble()));
-		// drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(translationXSupplier.getAsDouble(),
-		// translationYSupplier.getAsDouble(), rotationSupplier.getAsDouble(),
-		// drivetrain.getGyroscopeRotation()));
+		// drivetrain.drive(new ChassisSpeeds(translationXSupplier.getAsDouble(),
+		// translationYSupplier.getAsDouble(),
+		// rotationSupplier.getAsDouble()));
+
+		// field oriented
+		drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(translationXSupplier.getAsDouble(),
+				translationYSupplier.getAsDouble(), rotationSupplier.getAsDouble(), drivetrain.getGyroscopeRotation()));
 	}
 
 	@Override

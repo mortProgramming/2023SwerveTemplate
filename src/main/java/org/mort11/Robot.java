@@ -2,7 +2,7 @@ package org.mort11;
 
 import org.mort11.util.Auto;
 
-import com.pathplanner.lib.server.PathPlannerServer;
+// import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,11 +15,17 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		m_robotContainer = new RobotContainer();
-		PathPlannerServer.startServer(5811);
-
+		// PathPlannerServer.startServer(5811);
+		boolean[] array1 = {true, false};
+		boolean[] array2 = {false, true};
+		double[] number1 = {1, 2};
+		double[] number2 = {3, 4};
 		SmartDashboard.putNumber("vx", 0);
 		SmartDashboard.putNumber("vy", 0);
 		SmartDashboard.putNumber("omega", 0);
+		SmartDashboard.putBooleanArray("Array1", array1);
+		SmartDashboard.putNumberArray("1", number1);
+		SmartDashboard.putNumberArray("2", number2);
 	}
 
 	@Override
